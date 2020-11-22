@@ -1,0 +1,18 @@
+.rojo {
+    color: rgb(206, 12, 12);
+}
+.fondoverde {
+    background-color: rgb(6, 153, 6);
+}
+.fondonaranja {
+    background-color: rgb(190, 165, 22);
+}
+.fondoclaro {
+    background-color: rgb(233, 226, 187);
+}
+.fondoclaro1 {
+    background-color: rgb(241, 238, 220);
+}
+.ocultar{
+    display: none;
+}
