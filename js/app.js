@@ -43,9 +43,9 @@ const PintarDB = () => {
 
       let nuevoItem = '';
       if(element.estado){
-        nuevoItem = `<div class="alert alert-success seleccionado" role="alert"><i class="material-icons float-left">done</i><b>${element.actividad}</b> <b  class="ocultar"> ${element.estado}</b><span class="float-right"><i class="material-icons">delete</i></span></div>`
+        nuevoItem = `<div class="alert alert-success p-1" role="alert"><i class="material-icons float-left">done</i><b>${element.actividad}</b> <b  class="ocultar"> ${element.estado}</b><span class="float-right"><i class="material-icons">delete</i></span></div>`
       }else{
-        nuevoItem = `<div class="alert alert-danger seleccionado" role="alert"><i class="material-icons float-left">horizontal_rule</i><b>${element.actividad}</b> <b  class="ocultar">- ${element.estado}</b><span class="float-right"><i class="material-icons">delete</i></span></div>`
+        nuevoItem = `<div class="alert alert-danger p-1" role="alert"><i class="material-icons float-left">horizontal_rule</i><b>${element.actividad}</b> <b  class="ocultar">- ${element.estado}</b><span class="float-right"><i class="material-icons">delete</i></span></div>`
       }
       listaActividadesUI.innerHTML += nuevoItem;
     });
