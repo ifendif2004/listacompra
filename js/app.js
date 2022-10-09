@@ -1,7 +1,7 @@
 // Variables globales
 
 const formularioUI = document.querySelector('#formulario');
-const btnGuardar = document.getElementById('submit')
+const btnGuardar = document.getElementById('btnGuardar')
 
 const listaProductosUI = document.getElementById('listaProductos');
 let arrayProductos = [];
@@ -11,12 +11,27 @@ let arrayProductos = [];
 
 const CrearItem = (producto) => {
   producto = producto.charAt(0).toUpperCase() + producto.slice(1);
-  let item = {
-    producto: producto,
-    estado: false
+  if (existe(producto)) {
+    alert("Este producto ya exite en la cesta!!");
+  } else {
+    let item = {
+      producto: producto,
+      estado: false
+    }
+    arrayProductos.push(item);
+    return item;
   }
-  arrayProductos.push(item);
-  return item;
+}
+
+const existe = (producto) => {
+  const arrayProductos = JSON.parse(localStorage.getItem('listaCompraStorage'))
+  if (arrayProductos == null) return false;
+  for (let i = 0; i < arrayProductos.length; i++) {
+    if (arrayProductos[i].producto === producto) {
+      return true;
+    }
+  }
+  return false;
 }
 
 const GuardarDB = () => {
@@ -76,8 +91,8 @@ const EditarDB = (producto) => {
 
 // ---- EventListener ----------------------------------
 
-//formularioUI.addEventListener('submit', (e) => {
-  btnGuardar.addEventListener('click', (e) => {
+//formularioUI.addEventListener("submit", (e) => {
+btnGuardar.addEventListener("click", (e) => {
   e.preventDefault();
   let productoUI = document.querySelector('#producto').value;
 
@@ -90,7 +105,7 @@ const EditarDB = (producto) => {
 
 document.addEventListener('DOMContentLoaded', PintarDB);
 
-listaProductosUI.addEventListener('click', (e) => {
+listaProductosUI.addEventListener("click", (e) => {
   e.preventDefault();
   var path = e.path || (e.composedPath && e.composedPath());
 
@@ -109,24 +124,5 @@ listaProductosUI.addEventListener('click', (e) => {
   //  console.log("e2: " + e.target.parentElement.childNodes[3].id)
   //  console.log("e.target.id" + e.target.id)
   //  console.log("e2: " + e.currentTarget.childNodes['1'].childNodes['1'].childNodes['3'].innerText)
-
-
-/*   if (e.target.innerHTML === 'done' || e.target.innerHTML === 'horizontal_rule' || e.target.innerHTML === 'delete') {
-    var path = e.path || (e.composedPath && e.composedPath());
-
-    if (e.target.innerHTML === 'delete') {
-      // Accción de eliminar
-      let texto = path[2].childNodes[1].innerHTML;
-      EliminarDB(texto);
-    }
-    if (e.target.innerHTML === 'done' || e.target.innerHTML === 'horizontal_rule') {
-      // Accción de editar
-      let texto = path[1].childNodes[1].innerHTML;
-      EditarDB(texto);
-    }
-  } */
-
-
-
 });
 

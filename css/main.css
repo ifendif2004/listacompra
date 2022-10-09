@@ -14,7 +14,6 @@
 body {
     font-family: “Helvetica”, arial, sans-serif;
     background-color: var(--fondo);
-    font-size: calc(1vw + 1vh + 1.0vmin);
 }
 
 .container {
@@ -31,18 +30,19 @@ body {
 
 h3 {
     text-align: center;
+    font-size: calc(1vw + 2vh + 1.5vmin);
     color: var(--azuloscuro);
 }
 
 #producto,
-#submit {
+#btnGuardar {
     width: 100%;
     margin-bottom: 0.3em;
+    font-size: calc(1vw + 2.2vh);
 }
 
-#submit {
+#btnGuardar {
     background-color: var(--azul);
-    font-size: calc(1vw + 1vh + 1.5vmin);
 }
 
 #listaProductos {
@@ -73,8 +73,8 @@ h3 {
 
 .itemproducto p {
     padding: 0.1em;
-    font-size: calc(1vw + 1.5vh + 1.5vmin);
     margin-left: 0.5em;
+    font-size: calc(1vw + 1.3vh + 1.5vmin);
 }
 
 .grupocheck {
