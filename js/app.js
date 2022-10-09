@@ -1,125 +1,129 @@
 // Variables globales
 
 const formularioUI = document.querySelector('#formulario');
-const listaActividadesUI = document.getElementById('listaActividades');
-let arrayActividades = [];
+const listaProductosUI = document.getElementById('listaProductos');
+let arrayProductos = [];
 
 
 //--- Funciones ----------------------------------
 
-const CrearItem = (actividad) => {
-
+const CrearItem = (producto) => {
+  producto = producto.charAt(0).toUpperCase() + producto.slice(1);
   let item = {
-    actividad: actividad,
+    producto: producto,
     estado: false
   }
-
-  arrayActividades.push(item);
-
+  arrayProductos.push(item);
   return item;
-
 }
 
 const GuardarDB = () => {
-
-  
-  localStorage.setItem('listaCompraStorage', JSON.stringify(arrayActividades));
-
+  localStorage.setItem('listaCompraStorage', JSON.stringify(arrayProductos));
   PintarDB();
-
 }
 
 const PintarDB = () => {
-
-  listaActividadesUI.innerHTML = '';
-
-  arrayActividades = JSON.parse(localStorage.getItem('listaCompraStorage'));
-  
-  if(arrayActividades === null){
-    arrayActividades = [];
-  }else{
-
-    arrayActividades.forEach(element => {
+  listaProductosUI.innerHTML = '';
+  arrayProductos = JSON.parse(localStorage.getItem('listaCompraStorage'));
+  if (arrayProductos === null) {
+    arrayProductos = [];
+  } else {
+    arrayProductos.forEach(element => {
 
       let nuevoItem = '';
-      if(element.estado){
-        nuevoItem = `<div class="alert alert-success p-1" role="alert"><i class="material-icons float-left">done</i><b>${element.actividad}</b> <b  class="ocultar"> ${element.estado}</b><span class="float-right"><i class="material-icons">delete</i></span></div>`
-      }else{
-        nuevoItem = `<div class="alert alert-danger p-1" role="alert"><i class="material-icons float-left">horizontal_rule</i><b>${element.actividad}</b> <b  class="ocultar">- ${element.estado}</b><span class="float-right"><i class="material-icons">delete</i></span></div>`
+      if (element.estado) {
+        nuevoItem = `<div class="itemproducto">
+                        <div class="grupocheck">
+                          <img src="./img/carroazul.png" id="ok">
+                          <p>${element.producto}</p> 
+                        </div>
+                        <img src="./img/papeleraroja.png" id="ko"> 
+                     </div>`
+      } else {
+        nuevoItem = `<div class="itemproducto">
+                        <div class="grupocheck">
+                          <img src="./img/linea.png" id="ok">
+                          <p>${element.producto}</p> 
+                        </div>
+                        <img src="./img/papeleraroja.png" id="ko"> 
+                     </div>`
       }
-      listaActividadesUI.innerHTML += nuevoItem;
+      listaProductosUI.innerHTML += nuevoItem;
     });
-
   }
 }
 
-const EliminarDB = (actividad) => {
+const EliminarDB = (producto) => {
   let indexArray;
-  arrayActividades.forEach((elemento, index) => {
-    
-    if(elemento.actividad === actividad){
+  arrayProductos.forEach((elemento, index) => {
+    if (elemento.producto === producto) {
       indexArray = index;
     }
-    
   });
-
-  arrayActividades.splice(indexArray,1);
+  arrayProductos.splice(indexArray, 1);
   GuardarDB();
-
 }
 
-const EditarDB = (actividad) => {
-
-  let indexArray = arrayActividades.findIndex((elemento)=>elemento.actividad === actividad);
-
-  // arrayActividades[indexArray].estado = true;
-  arrayActividades[indexArray].estado = !arrayActividades[indexArray].estado;
-
+const EditarDB = (producto) => {
+  let indexArray = arrayProductos.findIndex((elemento) => elemento.producto === producto);
+  // arrayProductos[indexArray].estado = true;
+  arrayProductos[indexArray].estado = !arrayProductos[indexArray].estado;
   GuardarDB();
-
 }
 
 
-// ---- EventListener ------------
+// ---- EventListener ----------------------------------
 
 formularioUI.addEventListener('submit', (e) => {
-
-  //console.log("evento submit: " + e)
   e.preventDefault();
-  let actividadUI = document.querySelector('#actividad').value;
+  let productoUI = document.querySelector('#producto').value;
 
-  if (actividadUI){
-    CrearItem(actividadUI);
+  if (productoUI) {
+    CrearItem(productoUI);
     GuardarDB();
   }
-
   formularioUI.reset();
-
 });
 
 document.addEventListener('DOMContentLoaded', PintarDB);
 
-listaActividadesUI.addEventListener('click', (e) => {
-
+listaProductosUI.addEventListener('click', (e) => {
   e.preventDefault();
+  var path = e.path || (e.composedPath && e.composedPath());
 
-  if(e.target.innerHTML === 'done' || e.target.innerHTML === 'horizontal_rule' || e.target.innerHTML === 'delete'){
+  if (e.target.parentElement.childNodes[1].id == 'ok') {
+    // console.log("e: " + e.target.parentElement.childNodes[1].id)
+    // console.log("e: " + path[2].childNodes[1].childNodes[3].innerHTML)
+    // console.log("e: " + e.target.parentElement.childNodes[3].firstChild.data)
+    EditarDB(path[2].childNodes[1].childNodes[3].innerHTML);
+  }
+  if (e.target.parentElement.childNodes[3].id == 'ko') {
+    // console.log("e: " + e.target.parentElement.childNodes[3].id)
+    // console.log("e: " + path[1].childNodes[1].childNodes[3].innerHTML)
+    EliminarDB(path[1].childNodes[1].childNodes[3].innerHTML);
+  }
+  //  console.log("e1: " + e.target.parentElement.childNodes[1].id)
+  //  console.log("e2: " + e.target.parentElement.childNodes[3].id)
+  //  console.log("e.target.id" + e.target.id)
+  //  console.log("e2: " + e.currentTarget.childNodes['1'].childNodes['1'].childNodes['3'].innerText)
+
+
+/*   if (e.target.innerHTML === 'done' || e.target.innerHTML === 'horizontal_rule' || e.target.innerHTML === 'delete') {
     var path = e.path || (e.composedPath && e.composedPath());
 
-  if(e.target.innerHTML === 'delete'){
+    if (e.target.innerHTML === 'delete') {
       // Accción de eliminar
       let texto = path[2].childNodes[1].innerHTML;
       EliminarDB(texto);
     }
-    if(e.target.innerHTML === 'done' || e.target.innerHTML === 'horizontal_rule'){
+    if (e.target.innerHTML === 'done' || e.target.innerHTML === 'horizontal_rule') {
       // Accción de editar
       let texto = path[1].childNodes[1].innerHTML;
       EditarDB(texto);
     }
-  }
+  } */
 
 
 
 });
-
 
