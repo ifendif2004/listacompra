@@ -72,7 +72,8 @@ h3 {
 }
 
 .itemproducto p {
-    padding: 0.5em;
+    padding: 0.1em;
+    font-size: calc(1vw + 1.5vh + 1.5vmin);
     margin-left: 0.5em;
 }
 

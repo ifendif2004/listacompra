@@ -1,6 +1,8 @@
 // Variables globales
 
 const formularioUI = document.querySelector('#formulario');
+const btnGuardar = document.getElementById('submit')
+
 const listaProductosUI = document.getElementById('listaProductos');
 let arrayProductos = [];
 
@@ -74,7 +76,8 @@ const EditarDB = (producto) => {
 
 // ---- EventListener ----------------------------------
 
-formularioUI.addEventListener('submit', (e) => {
+//formularioUI.addEventListener('submit', (e) => {
+  btnGuardar.addEventListener('click', (e) => {
   e.preventDefault();
   let productoUI = document.querySelector('#producto').value;
 
