@@ -92,13 +92,15 @@ const EditarDB = (producto) => {
 // ---- EventListener ----------------------------------
 
 //formularioUI.addEventListener("submit", (e) => {
-btnGuardar.addEventListener("click", (e) => {
-  e.preventDefault();
+btnGuardar.addEventListener("click", (event) => {
+  event.preventDefault();
   let productoUI = document.querySelector('#producto').value;
 
   if (productoUI) {
     CrearItem(productoUI);
     GuardarDB();
+  }else{
+    alert ("Informa el producto " + productoUI)
   }
   formularioUI.reset();
 });
