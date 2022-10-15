@@ -30,7 +30,7 @@ body {
 
 h3 {
     text-align: center;
-    font-size: calc(1vw + 2vh + 1.5vmin);
+    font-size: calc(1vw + 1.5vh + 3.5vmin);
     color: var(--azuloscuro);
 }
 
@@ -38,8 +38,8 @@ h3 {
 #btnGuardar {
     width: 100%;
     margin-bottom: 0.3em;
-    font-size: calc(1vw + 1.5vh + 1.5vmin);
-    /* font-size: 150%; */
+    /* font-size: calc(1vw + 1.5vh + 1.5vmin); */
+    font-size: 100%;
 }
 
 #btnGuardar {

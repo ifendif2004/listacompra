@@ -7,6 +7,16 @@ const listaProductosUI = document.getElementById('listaProductos');
 let arrayProductos = [];
 
 
+// -----------Registrar el Service Worker------------------
+let swLocation = "sw-listacompra.js";
+if (navigator.serviceWorker) {
+	if (window.location.href.includes("localhost")) swLocation = "/sw-listacompra.js";
+	//Varia según el host
+	navigator.serviceWorker.register(swLocation);
+} else {
+	console.log("no se ha podido registrar el SW " + navigator.serviceWorker)
+}
+
 //--- Funciones ----------------------------------
 
 const CrearItem = (producto) => {
