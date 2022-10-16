@@ -1,6 +1,6 @@
 {
   "name": "Cesta de la compra",
-  "short_name": "Cesta de la compra",
+  "short_name": "Compra",
   "theme_color": "#70acd4",
   "background_color": "#2196f3",
   "display": "standalone",
