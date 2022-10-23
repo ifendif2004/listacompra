@@ -5,6 +5,7 @@
   "background_color": "#2196f3",
   "display": "standalone",
   "orientation": "portrait",
+  "prefer_related_applications": false,
   "scope": "/",
   "start_url": "https://ifendif2004.github.io/listacompra/",
   "icons": [

@@ -10,11 +10,11 @@ let arrayProductos = [];
 // -----------Registrar el Service Worker------------------
 let swLocation = "sw-listacompra.js";
 if (navigator.serviceWorker) {
-	if (window.location.href.includes("localhost")) swLocation = "/sw-listacompra.js";
-	//Varia según el host
-	navigator.serviceWorker.register(swLocation);
+  if (window.location.href.includes("localhost")) swLocation = "/sw-listacompra.js";
+  //Varia según el host
+  navigator.serviceWorker.register(swLocation);
 } else {
-	console.log("no se ha podido registrar el SW " + navigator.serviceWorker)
+  console.log("no se ha podido registrar el SW " + navigator.serviceWorker)
 }
 
 //--- Funciones ----------------------------------
@@ -52,6 +52,13 @@ const GuardarDB = () => {
 const PintarDB = () => {
   listaProductosUI.innerHTML = '';
   arrayProductos = JSON.parse(localStorage.getItem('listaCompraStorage'));
+  if (!(arrayProductos === null)) {
+    arrayProductos.sort((a, b) => {
+      if (a.estado > b.estado) return 1;
+      if (a.estado < b.estado) return -1;
+      if (a.estado = b.estado) return 0;
+    });
+  }
   if (arrayProductos === null) {
     arrayProductos = [];
   } else {
@@ -109,8 +116,8 @@ btnGuardar.addEventListener("click", (event) => {
   if (productoUI) {
     CrearItem(productoUI);
     GuardarDB();
-  }else{
-    alert ("Informa el producto " + productoUI)
+  } else {
+    alert("Informa el producto " + productoUI)
   }
   formularioUI.reset();
 });
