@@ -4,7 +4,10 @@ const APP_SHELL = [
   "./",
   "./index.html",
   "./css/main.css",
-  "./js/app.js"
+  "./js/app.js",
+  "./img/carroazul.png",
+  "./img/linea.png",
+  "./img/papeleraroja.png"
 ];
 
 self.addEventListener("install", (e) => {
