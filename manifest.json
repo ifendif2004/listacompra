@@ -6,7 +6,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "prefer_related_applications": false,
-  "scope": "/",
+  "scope": "https://ifendif2004.github.io/listacompra/",
   "start_url": "https://ifendif2004.github.io/listacompra/",
   "icons": [
     {
