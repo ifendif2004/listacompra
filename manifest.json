@@ -1,13 +1,13 @@
 {
-  "name": "Cesta de la compra",
+  "name": "Lista de la Compra",
   "short_name": "Compra",
-  "theme_color": "#70acd4",
-  "background_color": "#2196f3",
+  "description": "Tu lista de la compra inteligente",
+  "theme_color": "#667eea",
+  "background_color": "#667eea",
   "display": "standalone",
   "orientation": "portrait",
   "prefer_related_applications": false,
-  "scope": "https://ifendif2004.github.io/listacompra/",
-  "start_url": "https://ifendif2004.github.io/listacompra/",
+  "start_url": "./index.html",
   "icons": [
     {
       "src": "./img/icon-72x72.png",

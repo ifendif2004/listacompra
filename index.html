@@ -3,39 +3,42 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#70acd4"/>  <link rel="stylesheet" href="./css/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Tu lista de la compra">
+  <link rel="stylesheet" href="./css/main.css">
   <link rel="manifest" href="./manifest.json">
-  <link rel="apple-touch-icon" href="./img/papeleraroja.png">
-  <title>Lista de la compra</title>
+  <link rel="icon" href="./favicon.ico">
+  <link rel="apple-touch-icon" href="./img/icon-192x192.png">
+  <title>Lista de la Compra</title>
 </head>
 
 <body>
   <div class="container">
-    <div class="cabecera">
-      <h3>
-        LISTA DE LA COMPRA
-      </h3>
-
-      <form action='#' id="formulario">
-        <input type="text" id="producto" />
-        <button type="submit" id="btnGuardar">Añadir a la cesta</button>
-      </form>
-    </div>
-
-    <div id="listaProductos">
-      <!-- <div>
-        <span>accessibility</span>
-        <span><strong>Texto de la Actividad</strong> - Estado</span>
-        <span>done</span>
-        <span>delete</span>
+    <div class="card">
+      <div class="header">
+        <h1>LISTA DE LA COMPRA</h1>
+        <button id="themeToggle" class="theme-toggle" aria-label="Cambiar tema">
+          🌙
+        </button>
       </div>
-    </div> -->
+
+      <form class="form" id="formulario">
+        <input type="text" id="producto" placeholder="Añadir producto..." autocomplete="off" />
+        <button type="submit" aria-label="Añadir">
+          +
+        </button>
+      </form>
+
+      <div class="lista" id="listaProductos"></div>
+
+      <div class="contador" id="contador"></div>
+    </div>
   </div>
 
-   <script src="./js/app.js"></script>
+  <div class="toast" id="toast"></div>
 
+  <script src="./js/app.js"></script>
 </body>
 
 </html>

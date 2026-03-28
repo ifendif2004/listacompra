@@ -1,147 +1,158 @@
-// Variables globales
+const formulario = document.getElementById('formulario');
+const productoInput = document.getElementById('producto');
+const listaProductos = document.getElementById('listaProductos');
+const toast = document.getElementById('toast');
+const contador = document.getElementById('contador');
+const themeToggle = document.getElementById('themeToggle');
 
-const formularioUI = document.querySelector('#formulario');
-const btnGuardar = document.getElementById('btnGuardar')
-
-const listaProductosUI = document.getElementById('listaProductos');
 let arrayProductos = [];
 
-
-// -----------Registrar el Service Worker------------------
-let swLocation = "sw-listacompra.js";
-if (navigator.serviceWorker) {
-  if (window.location.href.includes("localhost")) swLocation = "/sw-listacompra.js";
-  //Varia según el host
-  navigator.serviceWorker.register(swLocation);
-} else {
-  console.log("no se ha podido registrar el SW " + navigator.serviceWorker)
-}
-
-//--- Funciones ----------------------------------
-
-const CrearItem = (producto) => {
-  producto = producto.charAt(0).toUpperCase() + producto.slice(1);
-  if (existe(producto)) {
-    alert("Este producto ya exite en la cesta!!");
-  } else {
-    let item = {
-      producto: producto,
-      estado: false
-    }
-    arrayProductos.push(item);
-    return item;
+const registerSW = () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw-listacompra.js', { scope: './' });
   }
-}
+};
 
-const existe = (producto) => {
-  const arrayProductos = JSON.parse(localStorage.getItem('listaCompraStorage'))
-  if (arrayProductos == null) return false;
-  for (let i = 0; i < arrayProductos.length; i++) {
-    if (arrayProductos[i].producto === producto) {
-      return true;
-    }
+registerSW();
+
+const showToast = (message) => {
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+};
+
+const existeProducto = (nombre) => arrayProductos.some(p => p.producto.toLowerCase() === nombre.toLowerCase());
+
+const crearItem = (producto) => {
+  const nombre = producto.charAt(0).toUpperCase() + producto.slice(1).toLowerCase();
+  if (existeProducto(nombre)) {
+    showToast('Este producto ya existe');
+    return null;
   }
-  return false;
-}
+  const item = { producto: nombre, estado: false };
+  arrayProductos.push(item);
+  return item;
+};
 
-const GuardarDB = () => {
+const guardarDB = () => {
   localStorage.setItem('listaCompraStorage', JSON.stringify(arrayProductos));
-  PintarDB();
-}
+  pintarDB();
+};
 
-const PintarDB = () => {
-  listaProductosUI.innerHTML = '';
-  arrayProductos = JSON.parse(localStorage.getItem('listaCompraStorage'));
-  if (!(arrayProductos === null)) {
-    arrayProductos.sort((a, b) => {
-      if (a.estado > b.estado) return 1;
-      if (a.estado < b.estado) return -1;
-      if (a.estado = b.estado) return 0;
-    });
-  }
-  if (arrayProductos === null) {
-    arrayProductos = [];
+const pintarDB = () => {
+  listaProductos.innerHTML = '';
+  const storage = localStorage.getItem('listaCompraStorage');
+  arrayProductos = storage ? JSON.parse(storage) : [];
+
+  arrayProductos.sort((a, b) => Number(a.estado) - Number(b.estado));
+
+  if (arrayProductos.length === 0) {
+    listaProductos.innerHTML = `
+      <div class="lista-vacia">
+        <p>Tu lista está vacía</p>
+        <p>Añade productos para empezar</p>
+      </div>
+    `;
   } else {
-    arrayProductos.forEach(element => {
-
-      let nuevoItem = '';
-      if (element.estado) {
-        nuevoItem = `<div class="itemproducto">
-                        <div class="grupocheck">
-                          <img src="./img/carroazul.png" id="ok">
-                          <p>${element.producto}</p> 
-                        </div>
-                        <img src="./img/papeleraroja.png" id="ko"> 
-                     </div>`
-      } else {
-        nuevoItem = `<div class="itemproducto">
-                        <div class="grupocheck">
-                          <img src="./img/linea.png" id="ok">
-                          <p>${element.producto}</p> 
-                        </div>
-                        <img src="./img/papeleraroja.png" id="ko"> 
-                     </div>`
+    const hayPendientes = arrayProductos.some(p => !p.estado);
+    let separadorAñadido = false;
+    arrayProductos.forEach((element, index) => {
+      if (element.estado && !separadorAñadido && hayPendientes) {
+        const separador = document.createElement('div');
+        separador.className = 'separador-lista';
+        listaProductos.appendChild(separador);
+        separadorAñadido = true;
       }
-      listaProductosUI.innerHTML += nuevoItem;
+
+      const div = document.createElement('div');
+      div.className = `item${element.estado ? ' comprado' : ''}`;
+      div.dataset.index = index;
+      div.innerHTML = `
+        <div class="item-check">
+          ${element.estado ? '<img src="./img/carroazul.png" alt="check">' : '<div class="circle-unchecked"></div>'}
+        </div>
+        <span class="item-texto">${element.producto}</span>
+        <button class="item-delete">
+          <img src="./img/papeleraroja.png" alt="eliminar">
+        </button>
+      `;
+      listaProductos.appendChild(div);
     });
   }
-}
 
-const EliminarDB = (producto) => {
-  let indexArray;
-  arrayProductos.forEach((elemento, index) => {
-    if (elemento.producto === producto) {
-      indexArray = index;
-    }
-  });
-  arrayProductos.splice(indexArray, 1);
-  GuardarDB();
-}
+  actualizarContador();
+};
 
-const EditarDB = (producto) => {
-  let indexArray = arrayProductos.findIndex((elemento) => elemento.producto === producto);
-  // arrayProductos[indexArray].estado = true;
-  arrayProductos[indexArray].estado = !arrayProductos[indexArray].estado;
-  GuardarDB();
-}
-
-
-// ---- EventListener ----------------------------------
-
-//formularioUI.addEventListener("submit", (e) => {
-btnGuardar.addEventListener("click", (event) => {
-  event.preventDefault();
-  let productoUI = document.querySelector('#producto').value;
-
-  if (productoUI) {
-    CrearItem(productoUI);
-    GuardarDB();
+const actualizarContador = () => {
+  const total = arrayProductos.length;
+  const comprados = arrayProductos.filter(p => p.estado).length;
+  if (total > 0) {
+    contador.innerHTML = `<span class="num">${comprados}</span> <span class="de">DE</span> <span class="num">${total}</span> <span class="productos">PRODUCTOS</span>`;
   } else {
-    alert("Informa el producto " + productoUI)
+    contador.innerHTML = '';
   }
-  formularioUI.reset();
-});
+};
 
-document.addEventListener('DOMContentLoaded', PintarDB);
+const eliminarDB = (index) => {
+  arrayProductos.splice(index, 1);
+  guardarDB();
+};
 
-listaProductosUI.addEventListener("click", (e) => {
+const editarDB = (index) => {
+  arrayProductos[index].estado = !arrayProductos[index].estado;
+  guardarDB();
+};
+
+formulario.addEventListener('submit', (e) => {
   e.preventDefault();
-  var path = e.path || (e.composedPath && e.composedPath());
-
-  if (e.target.parentElement.childNodes[1].id == 'ok') {
-    // console.log("e: " + e.target.parentElement.childNodes[1].id)
-    // console.log("e: " + path[2].childNodes[1].childNodes[3].innerHTML)
-    // console.log("e: " + e.target.parentElement.childNodes[3].firstChild.data)
-    EditarDB(path[2].childNodes[1].childNodes[3].innerHTML);
+  const valor = productoInput.value.trim();
+  if (valor) {
+    crearItem(valor);
+    guardarDB();
+    productoInput.value = '';
+    productoInput.focus();
   }
-  if (e.target.parentElement.childNodes[3].id == 'ko') {
-    // console.log("e: " + e.target.parentElement.childNodes[3].id)
-    // console.log("e: " + path[1].childNodes[1].childNodes[3].innerHTML)
-    EliminarDB(path[1].childNodes[1].childNodes[3].innerHTML);
-  }
-  //  console.log("e1: " + e.target.parentElement.childNodes[1].id)
-  //  console.log("e2: " + e.target.parentElement.childNodes[3].id)
-  //  console.log("e.target.id" + e.target.id)
-  //  console.log("e2: " + e.currentTarget.childNodes['1'].childNodes['1'].childNodes['3'].innerText)
 });
 
+document.addEventListener('DOMContentLoaded', pintarDB);
+
+listaProductos.addEventListener('click', (e) => {
+  const item = e.target.closest('.item');
+  if (!item) return;
+
+  const index = parseInt(item.dataset.index);
+
+  if (e.target.closest('.item-check')) {
+    editarDB(index);
+  } else if (e.target.closest('.item-delete')) {
+    eliminarDB(index);
+  }
+});
+
+// --- Theme Toggle ---
+const toggleTheme = () => {
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? '' : 'dark';
+  if (newTheme === 'dark') {
+    document.body.setAttribute('data-theme', 'dark');
+    themeToggle.textContent = '☀️';
+  } else {
+    document.body.removeAttribute('data-theme');
+    themeToggle.textContent = '🌙';
+  }
+  localStorage.setItem('theme', newTheme);
+};
+
+const initTheme = () => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.body.setAttribute('data-theme', 'dark');
+    themeToggle.textContent = '☀️';
+  } else {
+    document.body.removeAttribute('data-theme');
+    themeToggle.textContent = '🌙';
+  }
+};
+
+themeToggle.addEventListener('click', toggleTheme);
+initTheme();
