@@ -1,12 +1,10 @@
-const STATIC_CACHE = "lista-compra-v1";
+const STATIC_CACHE = "lista-compra-v2";
 
 const APP_SHELL = [
   "./",
   "./index.html",
   "./css/main.css",
   "./js/app.js",
-  "./img/carroazul.png",
-  "./img/papeleraroja.png",
   "./img/linea.png",
   "./img/icon-48x48.png",
   "./img/icon-72x72.png",
