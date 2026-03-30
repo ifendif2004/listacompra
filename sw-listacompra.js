@@ -1,4 +1,4 @@
-const STATIC_CACHE = "lista-compra-v2";
+const STATIC_CACHE = "lista-compra-v3";
 
 const APP_SHELL = [
   "./",
